@@ -1,1 +1,37 @@
-hashMapNote
+Serializable接口：
+一、
+    实现了Serializable接口的类才具备序列化数据的能力，没有实现该接口的类不具备任何字段和数据的序列化和反序列化能力；
+    实现该接口的类的子类同样具备序列化能力；
+    该接口没有任何方法和字段，仅用来标识序列化的语义。
+二、父类没有实现序列化接口，而子类需要序列化的情况：
+    子类必须保存和恢复父类public、protected、可访问的package字段；
+    同时父类必须有一个子类可访问的无参的构造函数使子类可以初始化父类。除此之外的其他情况，声明子类序列化都会抛出运行时错误。
+    反序列化是，无序列化类的字段通过该类的public 或者protected 无参构造函数进行初始化。该无参构造函数必须是序列化子类可访问的。序列化子类的字段则从流中恢复。
+三、遍历一个图时，可能会遇到不支持序列化接口的对象，此时会抛出NotSerializableException异常来识别此类中不可序列化的对象
+四、在序列化和反序列化过程中需要特殊处理的类必须实现以下方法：
+     * <PRE>
+ * private void writeObject(java.io.ObjectOutputStream out)
+ *     throws IOException
+ * private void readObject(java.io.ObjectInputStream in)
+ *     throws IOException, ClassNotFoundException;
+ * private void readObjectNoData()
+ *     throws ObjectStreamException;
+ * </PRE>
+  1. writeObject方法
+     此方法负责将类的字段写入流，以便readObject可以从中恢复；
+     此方法通过调用Out.defaultWriteObject来调用保存对象字段的默认方法；
+     此方法不需要关注它写入的字段是子类字段还是父类字段；
+     保存类的状态可以通过使用此方法将变量写入ObjectOutputStream 或者 使用 DataOutput支持的原始数据类型的方法；
+  2. readObject方法
+     同上
+五、注意事项 effective java中描述
+https://cl0610.github.io/effective-java-learning/%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E5%BA%8F%E5%88%97%E5%8C%96/74.%E8%B0%A8%E6%85%8E%E7%9A%84%E5%AE%9E%E7%8E%B0Serializable%E6%8E%A5%E5%8F%A3.html
+六、 序列化机制依赖于一个long型的serialVersionUID，如果没有显式的指定，在序列化运行时会基于该类的结构自动计算出一个值。如果类的结构发生变化就会导致自动计算出的serialVersionUID不同。
+这就会导致一个问题，序列化之后类如果新增了一个字段，反序列过程就会失败。一般会报InvalidClassException这样的异常。
+
+
+parcelable接口：
+parcelable接口是android中使用的序列化接口
+     
+     
+ 
