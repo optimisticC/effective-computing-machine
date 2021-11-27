@@ -1,0 +1,5 @@
+1. 为什么android选择使用Binder作为进程间通信？linux进程间通信都有哪几种方式？
+linux进程通信有管道、共享内存、socket、消息队列等。
+管道：在创建时分配一个page大小的内存，缓存区大小比较有限；
+消息队列：
+http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/SharedPreferencesImpl.java
